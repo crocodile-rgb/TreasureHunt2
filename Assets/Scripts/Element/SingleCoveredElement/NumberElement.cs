@@ -1,19 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class NumberElement : SingleCoveredElement
+public class NumberElement : SingleCoveredElement 
 {
+    public bool needEffect = true;
+
     public override void Awake()
     {
         base.Awake();
-        elementState = ElementState.Covered;
         elementContent = ElementContent.Number;
     }
 
     public override void OnMiddleMouseButton()
     {
-        GameManager.Instance.UncoveredAdjacentElements(x, y);
+        if ((int)GameManager.Instance.player.transform.position.x == x && (int)GameManager.Instance.player.transform.position.y == y)
+        {
+            GameManager.Instance.UncoveredAdjacentElements(x, y);
+        }
+        else
+        {
+            OnLeftMouseButton();
+        }
     }
 
     public override void UncoveredElementSingle()
@@ -22,7 +28,10 @@ public class NumberElement : SingleCoveredElement
         RemoveFlag();
         elementState = ElementState.Uncovered;
         ClearShadow();
-        Instantiate(GameManager.Instance.uncoveredEffect, transform);
+        if (needEffect == true)
+        {
+            PoolManager.Instance.GetInstance(EffectType.UncoveredEffect, transform);
+        }
         LoadSprite(GameManager.Instance.numberSprites[GameManager.Instance.CountAdjacentTraps(x, y)]);
     }
 

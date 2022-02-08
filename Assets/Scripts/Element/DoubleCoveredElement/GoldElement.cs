@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GoldElement : DoubleCoveredElement
+public class GoldElement : DoubleCoveredElement 
 {
     public GoldType goldType;
 
@@ -17,10 +15,42 @@ public class GoldElement : DoubleCoveredElement
         Transform goldEffect = transform.Find("GoldEffect");
         if (goldEffect != null)
         {
-            Destroy(goldEffect.gameObject);
+            PoolManager.Instance.StoreInstance(EffectType.GoldEffect, goldEffect.gameObject);
         }
-        //Debug.Log("gold");
+        GetGold();
         base.OnUncovered();
+    }
+
+    private void GetGold()
+    {
+        AudioManager.Instance.PlayClip(AudioManager.Instance.pick);
+        int x = 1;
+        if (GameManager.Instance.isGrass == true) x = 2;
+        switch (goldType)
+        {
+            case GoldType.One:
+                GameManager.Instance.gold += 30 * x;
+                break;
+            case GoldType.Two:
+                GameManager.Instance.gold += 60 * x;
+                break;
+            case GoldType.Three:
+                GameManager.Instance.gold += 100 * x;
+                break;
+            case GoldType.Four:
+                GameManager.Instance.gold += 150 * x;
+                break;
+            case GoldType.Five:
+                GameManager.Instance.gold += 450 * x;
+                break;
+            case GoldType.Six:
+                GameManager.Instance.gold += 600 * x;
+                break;
+            case GoldType.Seven:
+                GameManager.Instance.gold += 1000 * x;
+                break;
+        }
+        MainPanel.Instance.UpdateUI(MainPanel.Instance.goldText.rectTransform);
     }
 
     public override void ConfirmSprite()
@@ -28,7 +58,7 @@ public class GoldElement : DoubleCoveredElement
         Transform goldEffect = transform.Find("GoldEffect");
         if (goldEffect == null)
         {
-            Instantiate(GameManager.Instance.goldEffect, transform).name = "GoldEffect";
+            PoolManager.Instance.GetInstance(EffectType.GoldEffect, transform).name = "GoldEffect";
         }
         LoadSprite(GameManager.Instance.goldSprites[(int)goldType]);
     }

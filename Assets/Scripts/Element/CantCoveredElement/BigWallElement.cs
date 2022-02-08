@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class BigWallElement : CantCoveredElement
+public class BigWallElement : CantCoveredElement 
 {
     public override void Awake()
     {
@@ -10,5 +8,4 @@ public class BigWallElement : CantCoveredElement
         elementContent = ElementContent.BigWall;
         LoadSprite(GameManager.Instance.bigwallSprites[Random.Range(0, GameManager.Instance.bigwallSprites.Length)]);
     }
-    
 }
